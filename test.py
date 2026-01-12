@@ -1,25 +1,24 @@
 import sys
 
-n, m = map(int, sys.stdin.readline().split())
+n = int(sys.stdin.readline())
+num_list = list(map(int, sys.stdin.readline().split()))
+plus, minus, multi, div = map(int, sys.stdin().readline().split())
 
-def generate_combinations_4(n, k):
-    results = []
-    combination = []
-    def backtrack(start):
-        if len(combination) == k:
-            results.append(combination[:])
-            return 
+operator = []
+results = []
 
-        for i in range(start, n+1):
-            combination.append(i)
-            backtrack(i)
-            combination.pop()
-
-
-    backtrack(1)
-    return results
-
-final_result = generate_combinations_4(n, m)
-
-for line in final_result:
-    print(*line)
+def dfs(index, plus, minus, multi, div):
+    if index == len(operator):
+        results.append(operator[:])
+        return
+    
+    if plus>0:
+        dfs(index+1, plus-1, minus, multi, div)
+    if minus>0:
+        dfs(index+1, plus, minus-1, multi, div)
+    if multi>0:
+        dfs(index+1, plus, minus, multi-1, div)
+    if div>0:
+        dfs(index+1, plus, minus, multi, div-1)
+        
+        
