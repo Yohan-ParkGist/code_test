@@ -1,24 +1,15 @@
 import sys
 
-n = int(sys.stdin.readline())
-num_list = list(map(int, sys.stdin.readline().split()))
-plus, minus, multi, div = map(int, sys.stdin().readline().split())
-
-operator = []
-results = []
-
-def dfs(index, plus, minus, multi, div):
-    if index == len(operator):
-        results.append(operator[:])
-        return
+word1 = sys.stdin.readline().rstrip()
+word2 = sys.stdin.readline().rstrip()
+n = len(word1)
+m = len(word2)
+lcs = [[0]*(n+1) for _ in range(m+1)]
+for i in range(1, m+1):
+    for j in range(1, n+1):
+        if word1[j-1] == word2[i-1]:
+            lcs[i][j] = lcs[i-1][j-1]+1
+        else:
+            lcs[i][j] = max(lcs[i-1][j], lcs[i][j-1])
     
-    if plus>0:
-        dfs(index+1, plus-1, minus, multi, div)
-    if minus>0:
-        dfs(index+1, plus, minus-1, multi, div)
-    if multi>0:
-        dfs(index+1, plus, minus, multi-1, div)
-    if div>0:
-        dfs(index+1, plus, minus, multi, div-1)
-        
-        
+print(lcs[m][n])
