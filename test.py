@@ -1,32 +1,31 @@
 import sys
+from collections import deque
 
-def matrix_mul(matrix1, matrix2):
-    ans = [[0]*dim for _ in range(dim)]
-    for i in range(dim):
-        for j in range(dim):
-            for l in range(dim):
-                ans[i][j] += matrix1[i][l]*matrix2[l][j]
-                ans[i][j] = ans[i][j]%p
-    return ans
+def topology_sort():
+    global queue
+    result = []
+    for i in range(1, v+1):
+        if in_degree[i] == 0:
+            queue.append(i)
+            
+    while queue:
+        current = queue.popleft()
+        result.append(current)
+        for edge in directed_edge[current]:
+            in_degree[edge]-=1
+            if in_degree[edge] == 0:
+                queue.append(edge)
+                    
+    return result
+    
 
-def mat_power(a, b):
-    if b == 1:
-        for i in range(dim):
-            for j in range(dim):
-                a[i][j] %= p
-        return a
-    temp = (mat_power(a, b//2))
-    if b%2 == 0:
-        return matrix_mul(temp, temp)
-    else:
-        return matrix_mul(a, matrix_mul(temp, temp))
-
-dim = 2
-n = int(sys.stdin.readline())
-p = 1000000007
-
-matrix = [[1, 1], [1, 0]]
-
-final = mat_power(matrix, n)
-
-print(final[0][1])
+v, e = map(int, sys.stdin.readline().split())
+directed_edge = [[] for _ in range(v+1)]
+in_degree = [0]*(v+1)
+for _ in range(e):
+    a, b= map(int, sys.stdin.readline().split())
+    directed_edge[a].append(b)
+    in_degree[b]+=1
+    
+queue = deque()
+print(*topology_sort())
