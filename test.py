@@ -1,35 +1,21 @@
 import sys
-import heapq
 
-def bellman_ford(init, n):
-    s = []
-    distance = [float('inf')]*(n+1)
-    distance[init] = 0
-    heapq.heappush(s, (0, init))
-    while s:
-        dist, u = heapq.heappop(s)
-        if distance[u] < dist:
-            continue
-        
-        for edge in edge_weight[u]:
-            cost = dist+edge[1]
-            if distance[edge[0]] > cost:
-                distance[edge[0]] = cost
-                heapq.heappush(s, (cost, edge[0]))
-                
-    return distance
+n = int(sys.stdin.readline())
 
+r, c = map(int, sys.stdin.readline().split())
+rank = []
+rank.append(r)
+rank.append(c)
 
+for _ in range(n-1):
+    r, c = map(int, sys.stdin.readline().split())
+    rank.append(r)
+    rank.append(c)
 
-v, e = map(int, sys.stdin.readline().split())
-edge_weight = [[] for _ in range(v+1)]
-distance = [float('inf')]*(v+1)
-k = int(sys.stdin.readline())
-for _ in range(e):
-    a, b, w = map(int, sys.stdin.readline().split())
-    edge_weight[a].append((b, w))
+dp = [[[0]*(n+1) for _ in range(n+1)]]
 
-bellman_ford(k, v)
-
-for i in range(1, v+1):
-    print(distance[i])
+for diagonal in range(2, n+1):
+    for i in range(1, n-diagonal+2):
+        j = i + diagonal - 1
+        for p in range(i, j):
+            dp[i][j] = min()
